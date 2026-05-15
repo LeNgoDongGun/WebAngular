@@ -1,0 +1,447 @@
+<!-- =====================================================
+     LANDING PAGE — ĐặtSân.VN
+     Thêm vào app.routes.ts:  { path: '', component: LandingComponent }
+     ===================================================== -->
+
+<!-- ░░░ NAVBAR ░░░ -->
+<nav class="navbar" [class.scrolled]="isScrolled">
+    <div class="nav-inner">
+
+        <a class="logo" href="#" (click)="goto('hero',$event)">
+            <div class="logo-bolt">⚡</div>
+            <span class="logo-text">ĐặtSân<em>.VN</em></span>
+        </a>
+
+        <ul class="nav-links" [class.open]="mobileMenuOpen">
+            <li><a href="#sports" (click)="goto('sports',$event)">Loại Sân</a></li>
+            <li><a href="#how" (click)="goto('how',$event)">Cách Đặt</a></li>
+            <li><a href="#courts" (click)="goto('courts',$event)">Sân Nổi Bật</a></li>
+            <li><a href="#blog" (click)="goto('blog',$event)">Blog</a></li>
+        </ul>
+
+        <div class="nav-cta">
+            <button class="btn-ghost" routerLink="/login">Đăng Nhập</button>
+            <button class="btn-glow" routerLink="/register">Đăng Ký <span>→</span></button>
+        </div>
+
+        <button class="hamburger" [class.active]="mobileMenuOpen" (click)="toggleMenu()" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+
+    </div>
+</nav>
+
+
+<!-- ░░░ HERO ░░░ -->
+<section class="hero" id="hero">
+
+    <!-- Animated background orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- Floating sport particles -->
+    <div class="particles">
+        <div *ngFor="let p of particles" class="particle"
+            [ngStyle]="{'left':p.x+'%','top':p.y+'%','font-size':p.sz+'rem','animation-duration':p.dur+'s','animation-delay':'-'+p.del+'s'}">
+            {{p.icon}}
+        </div>
+    </div>
+
+    <!-- Hero content -->
+    <div class="hero-content">
+        <div class="hero-badge anim fade-up">
+            <span class="badge-dot"></span> Nền tảng đặt sân thể thao #1 Việt Nam
+        </div>
+
+        <h1 class="hero-title anim fade-up" style="animation-delay:.1s">
+            Đặt Sân <br>
+            Thể Thao<br>
+            Trong Vài Giây
+        </h1>
+
+        <p class="hero-sub anim fade-up" style="animation-delay:.2s">
+            Hơn <strong>500+ sân</strong> bóng đá, cầu lông, bóng rổ, pickleball &amp; bóng chuyền
+            trên toàn quốc — đặt lịch dễ dàng, xác nhận tức thì.
+        </p>
+
+        <div class="hero-actions anim fade-up" style="animation-delay:.3s">
+            <button class="btn-hero-primary" routerLink="/booking">
+                <span>⚡</span> Đặt Sân Ngay
+            </button>
+            <button class="btn-hero-outline" (click)="goto('courts',$event)">
+                Xem Sân →
+            </button>
+        </div>
+
+        <!-- Mini sport filter chips -->
+        <div class="hero-chips anim fade-up" style="animation-delay:.4s">
+            <span *ngFor="let s of sportTypes" class="chip" [style.borderColor]="s.color" [style.color]="s.color">
+                {{s.icon}} {{s.name}}
+            </span>
+        </div>
+    </div>
+
+    <!-- Floating stats card -->
+    <div class="hero-stats-card anim fade-right">
+        <div class="hsc-row" *ngFor="let st of stats | slice:0:3">
+            <span class="hsc-icon">{{st.icon}}</span>
+            <div>
+                <div class="hsc-num">{{st.value | number}}{{st.suffix}}</div>
+                <div class="hsc-label">{{st.label}}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator">
+        <div class="scroll-line"></div>
+        <span>Cuộn xuống</span>
+    </div>
+
+</section>
+
+
+<!-- ░░░ SPORT TYPES ░░░ -->
+<section class="sports-section" id="sports">
+    <div class="container">
+
+        <div class="section-header anim fade-up">
+            <span class="section-tag">Danh mục sân</span>
+            <h2>Chọn Môn Thể Thao <span class="underline-green">Của Bạn</span></h2>
+            <p>Đa dạng loại sân — chất lượng đảm bảo — giá cả minh bạch</p>
+        </div>
+
+        <div class="sports-grid">
+            <div class="sport-card anim fade-up" *ngFor="let sport of sportTypes; let i = index"
+                [style.animation-delay]="(i * 0.1) + 's'" [class.hovered]="hoveredSport === sport.id"
+                (mouseenter)="hoveredSport = sport.id" (mouseleave)="hoveredSport = null" routerLink="/courts"
+                [queryParams]="{sport: sport.id}">
+
+                <div class="sport-glow" [style.background]="sport.color"></div>
+
+                <div class="sport-icon-wrap"
+                    [ngStyle]="{'background': sport.gradient, 'box-shadow': '0 0 30px '+sport.color+'33'}">
+                    <span class="sport-emoji">{{sport.icon}}</span>
+                </div>
+
+                <h3 class="sport-name">{{sport.name}}</h3>
+                <p class="sport-count">{{sport.count}} sân có sẵn</p>
+
+                <div class="sport-arrow" [style.color]="sport.color">→</div>
+
+                <div class="sport-border-glow" [ngStyle]="{'border-color': sport.color+'44'}"></div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ░░░ HOW IT WORKS ░░░ -->
+<section class="how-section" id="how">
+    <div class="container">
+
+        <div class="section-header anim fade-up">
+            <span class="section-tag dark">Quy trình</span>
+            <h2>Đặt Sân Chỉ <span class="highlight-orange">3 Bước</span></h2>
+            <p>Đơn giản, nhanh chóng — sân yêu thích của bạn chỉ cách 3 bước</p>
+        </div>
+
+        <div class="steps-track">
+            <div class="step-connector"></div>
+
+            <div class="step-card anim fade-up" *ngFor="let step of steps; let i = index"
+                [style.animation-delay]="(i * 0.15) + 's'">
+                <div class="step-number">{{step.num}}</div>
+                <div class="step-icon-ring">
+                    <span>{{step.icon}}</span>
+                </div>
+                <h3>{{step.title}}</h3>
+                <p>{{step.desc}}</p>
+            </div>
+        </div>
+
+        <!-- CTA inline -->
+        <div class="how-cta anim fade-up">
+            <button class="btn-glow" routerLink="/register">Bắt đầu đặt sân miễn phí →</button>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ░░░ FEATURED COURTS ░░░ -->
+<section class="courts-section" id="courts">
+    <div class="container">
+
+        <div class="section-header anim fade-up">
+            <span class="section-tag">Nổi bật</span>
+            <h2>Sân Được <span class="gradient-text">Yêu Thích</span> Nhất</h2>
+            <p>Được đánh giá cao bởi hàng ngàn khách hàng trên toàn quốc</p>
+        </div>
+
+        <div class="courts-grid">
+            <div class="court-card anim fade-up" *ngFor="let court of featuredCourts; let i = index"
+                [style.animation-delay]="(i * 0.08) + 's'">
+
+                <!-- Image -->
+                <div class="court-img-wrap">
+                    <img [src]="court.image" [alt]="court.name" loading="lazy" />
+                    <div class="court-overlay">
+                        <button class="btn-book-now" routerLink="/booking" [queryParams]="{court: court.id}">
+                            Đặt Ngay ⚡
+                        </button>
+                    </div>
+                    <span *ngIf="court.badge" class="court-badge" [style.background]="court.badgeColor">
+                        {{court.badge}}
+                    </span>
+                    <span class="court-sport-tag">{{court.sport}}</span>
+                </div>
+
+                <!-- Info -->
+                <div class="court-info">
+                    <div class="court-meta">
+                        <span class="court-location">📍 {{court.location}}</span>
+                        <div class="court-rating">
+                            <span *ngFor="let s of stars(court.rating)" class="star" [class.filled]="s === 1">★</span>
+                            <span class="rating-num">{{court.rating}}</span>
+                            <span class="rating-count">({{court.reviews}})</span>
+                        </div>
+                    </div>
+                    <h3 class="court-name">{{court.name}}</h3>
+                    <div class="court-footer">
+                        <span class="court-price">{{price(court.price)}}</span>
+                        <button class="btn-court-details" routerLink="/courts/{{court.id}}">Chi tiết →</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="view-all-wrap anim fade-up">
+            <button class="btn-outline-green" routerLink="/courts">Xem tất cả sân →</button>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ░░░ STATS ░░░ -->
+<section class="stats-section" id="stats">
+    <div class="stats-bg-orb"></div>
+
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-item anim fade-up" *ngFor="let s of stats; let i = index"
+                [style.animation-delay]="(i * 0.1) + 's'">
+                <div class="stat-icon">{{s.icon}}</div>
+                <div class="stat-value">{{s.current | number}}{{s.suffix}}</div>
+                <div class="stat-label">{{s.label}}</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ░░░ TESTIMONIALS ░░░ -->
+<section class="testimonials-section" id="reviews">
+    <div class="container">
+
+        <div class="section-header anim fade-up">
+            <span class="section-tag">Đánh giá</span>
+            <h2>Khách Hàng <span class="underline-green">Nói Gì?</span></h2>
+            <p>Hàng nghìn đánh giá 5 sao từ người dùng thực tế</p>
+        </div>
+
+        <div class="testi-grid">
+            <div class="testi-card anim fade-up" *ngFor="let t of testimonials; let i = index"
+                [class.active]="activeTestimonial === i" [style.animation-delay]="(i * 0.12) + 's'"
+                (click)="setTestimonial(i)">
+
+                <div class="testi-quote-mark" [style.color]="t.color">"</div>
+
+                <p class="testi-text">{{t.comment}}</p>
+
+                <div class="testi-stars">
+                    <span *ngFor="let s of [1,2,3,4,5]" class="star filled">★</span>
+                </div>
+
+                <div class="testi-author">
+                    <div class="testi-avatar"
+                        [ngStyle]="{'background': 'linear-gradient(135deg,'+t.color+','+t.color+'88'}">
+                        {{t.initials}}
+                    </div>
+                    <div>
+                        <div class="testi-name">{{t.name}} <span>{{t.sport}}</span></div>
+                        <div class="testi-role">{{t.role}}</div>
+                    </div>
+                </div>
+
+                <div class="testi-glow" [style.background]="t.color"></div>
+            </div>
+        </div>
+
+        <!-- Dots -->
+        <div class="testi-dots">
+            <span *ngFor="let t of testimonials; let i = index" class="dot" [class.active]="activeTestimonial === i"
+                (click)="setTestimonial(i)"></span>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ░░░ BLOG ░░░ -->
+<section class="blog-section" id="blog">
+    <div class="container">
+
+        <div class="section-header anim fade-up">
+            <span class="section-tag dark">Blog thể thao</span>
+            <h2>Tin Tức &amp; <span class="highlight-orange">Mẹo Hay</span></h2>
+            <p>Cập nhật kiến thức, kỹ năng và tin tức thể thao mỗi ngày</p>
+        </div>
+
+        <div class="blog-grid">
+            <div class="blog-card anim fade-up" *ngFor="let post of blogPosts; let i = index"
+                [style.animation-delay]="(i * 0.12) + 's'">
+
+                <div class="blog-img-wrap">
+                    <img [src]="post.image" [alt]="post.title" loading="lazy" />
+                    <span class="blog-category"
+                        [ngStyle]="{'background':post.categoryColor+'22','color':post.categoryColor,'border-color':post.categoryColor+'44'}">
+                        {{post.category}}
+                    </span>
+                </div>
+
+                <div class="blog-body">
+                    <div class="blog-meta">
+                        <span>📅 {{post.date}}</span>
+                        <span>⏱ {{post.readTime}}</span>
+                    </div>
+                    <h3 class="blog-title">{{post.title}}</h3>
+                    <p class="blog-excerpt">{{post.excerpt}}</p>
+                    <a class="blog-read-more" routerLink="/blog/{{post.id}}">
+                        Đọc thêm <span>→</span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="view-all-wrap anim fade-up">
+            <button class="btn-outline-green" routerLink="/blog">Xem tất cả bài viết →</button>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ░░░ CTA BANNER ░░░ -->
+<section class="cta-section">
+    <div class="cta-bg-orb cta-orb-1"></div>
+    <div class="cta-bg-orb cta-orb-2"></div>
+
+    <div class="container">
+        <div class="cta-inner anim fade-up">
+
+            <div class="cta-sport-icons">
+                <span *ngFor="let s of sportTypes">{{s.icon}}</span>
+            </div>
+
+            <h2 class="cta-title">
+                Sẵn Sàng Chinh Phục <br>
+                <span class="gradient-text">Sân Đấu?</span>
+            </h2>
+
+            <p class="cta-sub">
+                Đăng ký miễn phí ngay hôm nay — nhận ngay <strong>ưu đãi 20%</strong> cho lần đặt sân đầu tiên!
+            </p>
+
+            <div class="cta-actions">
+                <button class="btn-hero-primary" routerLink="/register">
+                    ⚡ Đăng Ký Miễn Phí
+                </button>
+                <button class="btn-hero-outline" routerLink="/courts">
+                    Khám phá sân →
+                </button>
+            </div>
+
+            <p class="cta-fine">Không cần thẻ tín dụng · Hủy bất cứ lúc nào · Hỗ trợ 24/7</p>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ░░░ FOOTER ░░░ -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+
+            <!-- Brand -->
+            <div class="footer-brand">
+                <div class="logo">
+                    <div class="logo-bolt">⚡</div>
+                    <span class="logo-text">ĐặtSân<em>.VN</em></span>
+                </div>
+                <p>Nền tảng đặt sân thể thao hàng đầu Việt Nam. Đặt sân nhanh, chơi ngay, tận hưởng!</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook">𝗙</a>
+                    <a href="#" aria-label="Instagram">📸</a>
+                    <a href="#" aria-label="YouTube">▶</a>
+                    <a href="#" aria-label="TikTok">♪</a>
+                </div>
+            </div>
+
+            <!-- Loại sân -->
+            <div class="footer-col">
+                <h4>Loại Sân</h4>
+                <ul>
+                    <li *ngFor="let s of sportTypes">
+                        <a routerLink="/courts" [queryParams]="{sport: s.id}">{{s.icon}} {{s.name}}</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Liên kết -->
+            <div class="footer-col">
+                <h4>Liên Kết</h4>
+                <ul>
+                    <li><a routerLink="/about">Về chúng tôi</a></li>
+                    <li><a routerLink="/blog">Blog thể thao</a></li>
+                    <li><a routerLink="/pricing">Bảng giá</a></li>
+                    <li><a routerLink="/contact">Liên hệ</a></li>
+                    <li><a routerLink="/faq">FAQ</a></li>
+                </ul>
+            </div>
+
+            <!-- Liên hệ -->
+            <div class="footer-col">
+                <h4>Liên Hệ</h4>
+                <ul class="contact-list">
+                    <li>📍 123 Nguyễn Huệ, Quy Nhơn, Bình Định</li>
+                    <li>📞 0905 123 456</li>
+                    <li>✉️ hello&#64;datsanvn.com</li>
+                    <li>🕐 Hỗ trợ 24/7</li>
+                </ul>
+                <div class="app-badges">
+                    <div class="app-badge">📱 App Store</div>
+                    <div class="app-badge">🤖 Google Play</div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2025 ĐặtSân.VN · Bảo lưu mọi quyền</p>
+            <div class="footer-legal">
+                <a routerLink="/privacy">Chính sách bảo mật</a>
+                <a routerLink="/terms">Điều khoản sử dụng</a>
+            </div>
+        </div>
+
+    </div>
+</footer>
